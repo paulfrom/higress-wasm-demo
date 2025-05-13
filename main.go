@@ -42,7 +42,7 @@ func parseConfig(json gjson.Result, config *RedisCallConfig) error {
 func onHttpRequestHeaders(ctx wrapper.HttpContext, config RedisCallConfig) types.Action {
 	sid, _ := proxywasm.GetHttpRequestHeader("x-sid")
 	log.Infof("x-sid: %s", sid)
-	config.client.SetEx("higress:go:wasm:test", sid, 1000000, func(response resp.Value) {
+	config.client.Set("higress:go:wasm:test", sid, func(response resp.Value) {
 		if err := response.Error(); err != nil {
 			log.Errorf("set redis:%s", err.Error())
 			proxywasm.SendHttpResponse(430, nil, []byte("Error while calling redis"), -1)
